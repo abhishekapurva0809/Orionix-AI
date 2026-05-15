@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useUIStore } from '../store/uiStore'
 import { useChatStore } from '../store/chatStore'
 import { Plus, MessageSquare, Search, Pin, Trash2, Edit2, Settings, LogOut } from 'lucide-react'
@@ -13,13 +14,16 @@ const MOCK_CHATS = [
 
 export default function Sidebar() {
   const { setMobileMenuOpen } = useUIStore()
-  const { sessions, setSessions, updateSession } = useChatStore()
+  const { sessions, setSessions, updateSession, removeSession } = useChatStore()
   const [searchQuery, setSearchQuery] = useState('')
   
   // Inline edit state
   const [editingChatId, setEditingChatId] = useState(null)
   const [editTitle, setEditTitle] = useState('')
   const editInputRef = useRef(null)
+
+  // Delete modal state
+  const [chatToDelete, setChatToDelete] = useState(null)
 
   // Initialize with mock data if empty
   useEffect(() => {
@@ -62,6 +66,18 @@ export default function Sidebar() {
   const togglePin = (e, chat) => {
     e.stopPropagation()
     updateSession(chat._id, { isPinned: !chat.isPinned })
+  }
+
+  const confirmDelete = (e, chat) => {
+    e.stopPropagation()
+    setChatToDelete(chat)
+  }
+
+  const handleDelete = () => {
+    if (chatToDelete) {
+      removeSession(chatToDelete._id)
+      setChatToDelete(null)
+    }
   }
 
   return (
@@ -140,7 +156,11 @@ export default function Sidebar() {
                   >
                     <Edit2 size={14} />
                   </button>
-                  <button className="p-1 text-brand-muted hover:text-red-400 transition-colors cursor-pointer" title="Delete">
+                  <button 
+                    onClick={(e) => confirmDelete(e, chat)}
+                    className="p-1 text-brand-muted hover:text-red-400 transition-colors cursor-pointer" 
+                    title="Delete"
+                  >
                     <Trash2 size={14} />
                   </button>
                 </div>
@@ -171,6 +191,46 @@ export default function Sidebar() {
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {chatToDelete && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
+              onClick={() => setChatToDelete(null)}
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative glass-panel w-full max-w-sm p-6 rounded-xl border border-white/10 shadow-2xl flex flex-col gap-4"
+            >
+              <h3 className="text-lg font-bold text-brand-text">Delete Chat</h3>
+              <p className="text-sm text-brand-muted">
+                Are you sure you want to delete <span className="text-brand-primary font-medium">"{chatToDelete.title}"</span>? This action cannot be undone.
+              </p>
+              <div className="flex items-center justify-end gap-3 mt-2">
+                <button 
+                  onClick={() => setChatToDelete(null)}
+                  className="px-4 py-2 text-sm font-medium text-brand-text hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleDelete}
+                  className="px-4 py-2 text-sm font-medium bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg transition-colors border border-red-500/20 cursor-pointer"
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
