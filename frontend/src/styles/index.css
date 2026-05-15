@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: var(--primary);
+  --color-brand-bg: var(--bg);
+  --color-brand-surface: var(--surface);
+  --color-brand-text: var(--text);
+  --color-brand-muted: var(--muted);
+}
+
+:root {
+  /* Light Theme Variables */
+  --primary: #6c63ff;
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+}
+
+.dark {
+  /* Dark Theme Variables (Cinematic Futurism) */
+  --primary: #6c63ff;
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --text: #e4e1ee;
+  --muted: #888888;
+}
+
+@utility glass-panel {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+}
+
+@utility glass-glow {
+  box-shadow: 0 0 20px rgba(108, 99, 255, 0.2);
+}
+
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--color-brand-text);
+  background-color: var(--color-brand-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
