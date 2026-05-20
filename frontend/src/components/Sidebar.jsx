@@ -14,7 +14,7 @@ const MOCK_CHATS = [
 
 export default function Sidebar() {
   const { setMobileMenuOpen } = useUIStore()
-  const { sessions, setSessions, updateSession, removeSession, activeSessionId, setActiveSession } = useChatStore()
+  const { sessions, setSessions, updateSession, removeSession, activeSessionId, setActiveSession, addSession } = useChatStore()
   const [searchQuery, setSearchQuery] = useState('')
   
   // Inline edit state
@@ -167,7 +167,12 @@ export default function Sidebar() {
       {/* New Chat Button */}
       <div className="px-2 mb-6">
         <button 
-          onClick={handleLinkClick}
+          onClick={() => {
+            const newSession = { _id: Date.now().toString(), title: 'New Chat', isPinned: false }
+            addSession(newSession)
+            setActiveSession(newSession._id)
+            if (window.innerWidth < 768) handleLinkClick()
+          }}
           className="w-full flex items-center justify-center gap-2 bg-brand-primary hover:bg-[#5a52d5] text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-300 glass-glow cursor-pointer"
         >
           <Plus size={18} />

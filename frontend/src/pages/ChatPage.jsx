@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import { useThemeStore } from '../store/themeStore'
 import { useChatStore } from '../store/chatStore'
 import { Sun, Moon, Sparkles } from 'lucide-react'
 import ChatArea from '../components/ChatArea'
+import SmartEmptyState from '../components/SmartEmptyState'
 
 export default function ChatPage() {
   const { theme, toggleTheme } = useThemeStore()
@@ -40,16 +40,9 @@ export default function ChatPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[120px] pointer-events-none z-0" />
 
         {!activeSessionId ? (
-          <div className="flex-1 flex flex-col items-center justify-center opacity-40 select-none max-w-md text-center z-10 w-full">
-            <div className="w-20 h-20 rounded-2xl bg-brand-primary/15 flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(108,99,255,0.3)] border border-brand-primary/25">
-              <span className="text-brand-primary font-bold text-4xl">O</span>
-            </div>
-            <h2 className="text-xl font-bold tracking-widest uppercase text-brand-text mb-2">
-              Orionix AI
-            </h2>
-            <p className="text-sm text-brand-muted">
-              Welcome to the chat area. Start a conversation or select an existing session from the sidebar.
-            </p>
+          <div className="flex-1 w-full max-w-4xl flex flex-col relative z-10 h-full">
+            <SmartEmptyState />
+            {/* MessageInput will go here in Step 5.3 */}
           </div>
         ) : (
           <div className="flex-1 w-full max-w-4xl flex flex-col relative z-10 h-full">
