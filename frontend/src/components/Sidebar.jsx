@@ -14,7 +14,7 @@ const MOCK_CHATS = [
 
 export default function Sidebar() {
   const { setMobileMenuOpen } = useUIStore()
-  const { sessions, setSessions, updateSession, removeSession } = useChatStore()
+  const { sessions, setSessions, updateSession, removeSession, activeSessionId, setActiveSession } = useChatStore()
   const [searchQuery, setSearchQuery] = useState('')
   
   // Inline edit state
@@ -89,11 +89,21 @@ export default function Sidebar() {
   const pinnedSessions = filteredSessions.filter(s => s.isPinned)
   const recentSessions = filteredSessions.filter(s => !s.isPinned)
 
-  const renderChatRow = (chat) => (
-    <div 
-      key={chat._id}
-      className="group flex items-center justify-between px-3 py-2.5 hover:bg-white/5 rounded-lg cursor-pointer transition-colors h-10"
-    >
+  const renderChatRow = (chat) => {
+    const isActive = activeSessionId === chat._id
+    
+    return (
+      <div 
+        key={chat._id}
+        onClick={() => {
+          setActiveSession(chat._id)
+          if (window.innerWidth < 768) handleLinkClick() // close mobile menu when a chat is clicked
+        }}
+        className={cn(
+          "group flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-colors h-10",
+          isActive ? "bg-white/10 border-white/5" : "hover:bg-white/5 border-transparent"
+        )}
+      >
       {editingChatId === chat._id ? (
         <div className="flex items-center gap-3 w-full h-full overflow-hidden px-0" onClick={e => e.stopPropagation()}>
           <MessageSquare size={16} className="shrink-0 text-brand-primary" />
@@ -148,6 +158,7 @@ export default function Sidebar() {
       )}
     </div>
   )
+}
 
   return (
     <>
