@@ -3,6 +3,7 @@ import { useChatStore } from '../store/chatStore'
 import { Sun, Moon, Sparkles } from 'lucide-react'
 import ChatArea from '../components/ChatArea'
 import SmartEmptyState from '../components/SmartEmptyState'
+import MessageInput from '../components/MessageInput'
 
 export default function ChatPage() {
   const { theme, toggleTheme } = useThemeStore()
@@ -40,14 +41,14 @@ export default function ChatPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-[120px] pointer-events-none z-0" />
 
         {!activeSessionId ? (
-          <div className="flex-1 w-full max-w-4xl flex flex-col relative z-10 h-full">
+          <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col relative z-10 h-full">
             <SmartEmptyState />
-            {/* MessageInput will go here in Step 5.3 */}
+            <MessageInput />
           </div>
         ) : (
-          <div className="flex-1 w-full max-w-4xl flex flex-col relative z-10 h-full">
+          <div className="flex-1 w-full max-w-4xl mx-auto flex flex-col relative z-10 h-full">
             <ChatArea />
-            {/* MessageInput will go here in Step 5.3 */}
+            <MessageInput />
           </div>
         )}
       </div>
