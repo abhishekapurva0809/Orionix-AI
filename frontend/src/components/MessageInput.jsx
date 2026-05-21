@@ -24,7 +24,11 @@ export default function MessageInput() {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSend()
+      if (message.trim()) {
+        handleSend()
+      } else {
+        setMessage('')
+      }
     }
   }
 
